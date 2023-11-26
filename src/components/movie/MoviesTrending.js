@@ -6,7 +6,8 @@ import MovieCard from "./MovieCard";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-function MoviesNew() {
+
+function MoviesTrending() {
 	const [data, setData] = useState(null);
     useEffect(() => {
       const fetchData = async () => {
@@ -22,16 +23,19 @@ function MoviesNew() {
       fetchData();
     }, []);
 
+    console.log(data);
+
+
       return (
         <div style={styles.container}>
           <Typography variant="h5" gutterBottom>
-            Newest Movies
+            Top Movies
           </Typography>
           <div style={styles.scrollContainer}>
               {data &&
                 data.map((m) => (
                   <Grid item key={m.mid} style={styles.gridItem}>
-                      <MovieCard key={m.mid} movie={m} />
+                      <MovieCard movie={m} />
                   </Grid>
                 ))}
           </div>
@@ -55,4 +59,4 @@ const styles = {
   },
 };
 
-export default MoviesNew;
+export default MoviesTrending;

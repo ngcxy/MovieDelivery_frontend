@@ -1,7 +1,8 @@
-import MoviesTrending from "../components/MoviesTrending";
-import MoviesNew from "../components/MoviesNew";
-import Grid from '@mui/material/Grid';
 import React from "react";
+import MoviesTrending from "../components/movie/MoviesTrending";
+import MoviesNew from "../components/movie/MoviesNew";
+import Grid from '@mui/material/Grid';
+
 
 function HomePage() {
 
