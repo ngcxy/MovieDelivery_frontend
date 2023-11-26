@@ -15,13 +15,13 @@ const Footer = () => {
 const styles = {
   footer: {
     backgroundColor: '#f8f9fa',
-    color: 'black',
+    color: '#6c757d',
     padding: '20px 0',
     textAlign: 'center',
     width: '100%',
-    position: 'absolute',
+    // position: 'absolute',
     left: 0,
-    bottom: 0,
+    // bottom: 0,
   },
   container: {
     maxWidth: '1200px',

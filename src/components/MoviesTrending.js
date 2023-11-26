@@ -1,29 +1,62 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import MovieCard from "./MovieCard";
+
+//mui
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 
 function MoviesTrending() {
-	const [data, setData] = useState({
-		posts: null,
-	});
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://localhost:4000/movies');
-      // console.log(response.data);
-      setData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+	const [data, setData] = useState(null);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get('http://localhost:4000/movies');
+          console.log(response.data);
+          setData(response.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
 
-  fetchData();
-}, []);
+      fetchData();
+    }, []);
 
-	return (
-		<div>
-			<h1>Trending Movies</h1>
-		</div>
-	);
+    console.log(data);
+
+
+      return (
+        <div style={styles.container}>
+          <Typography variant="h5" gutterBottom>
+            Trending Movies
+          </Typography>
+          <div style={styles.scrollContainer}>
+              {data &&
+                data.map((m) => (
+                  <Grid item key={m.mid} style={styles.gridItem}>
+                      <MovieCard movie={m} />
+                  </Grid>
+                ))}
+          </div>
+        </div>
+      );
 }
+
+const styles = {
+  container: {
+    padding: '16px',
+  },
+  scrollContainer: {
+    display: 'flex',
+    overflowX: 'auto',
+    // whiteSpace: 'nowrap',
+  },
+  gridItem: {
+    flex: '0 0 auto',
+    width: '200px',
+    marginRight: '16px',
+  },
+};
 
 export default MoviesTrending;
