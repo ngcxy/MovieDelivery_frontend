@@ -7,6 +7,7 @@ export default function MovieCard({movie}) {
   // console.log(movie);
   return (
     <Link
+        key ={movie._id}
         style={{ textDecoration: 'none', color: 'inherit' }}
         href={`/movie/${movie._id}`}
     >
@@ -15,7 +16,7 @@ export default function MovieCard({movie}) {
           <CardMedia
             component="img"
             image={`https://image.tmdb.org/t/p/original/${movie.poster_url}`}
-            alt="green iguana"
+            alt="movie poster"
           />
           <CardContent>
             <Typography gutterBottom variant="h6" component="div">
