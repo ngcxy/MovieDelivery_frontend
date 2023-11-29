@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
+import YouTube from 'react-youtube';
 import axios from "axios";
 
 import {Grid, Box, Fab} from '@mui/material';
@@ -10,31 +11,50 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 function MovieDetail(){
     let { _id } = useParams();
-    const [data, setData] = useState(null);
+    const [info, setInfo] = useState(null);
+    const [rating, setRating] = useState([]);
+    const [provider, setProvider] = useState(null);
+    const [video, setVideo] = useState("");
+    const [review, setReview] = useState(null);
+
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://localhost:4000/movie/${_id}`);
-          setData(response.data);
+          const response_info = await axios.get(`http://localhost:4000/movies/${_id}`);
+          setInfo(response_info.data);
+          const response_rating = await axios.get(`http://localhost:4000/movies/${_id}/ratings`);
+          setRating(response_rating.data);
+          const response_provider = await axios.get(`http://localhost:4000/movies/${_id}/providers`);
+          setProvider(response_provider.data);
+          // const response_review = await axios.get(`http://localhost:4000/movies/${_id}/reviews`);
+          const response_video = await axios.get(`http://localhost:4000/movies/${_id}/videos`);
+          setVideo(response_video.data);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       };
-
       fetchData();
     }, []);
 
-    if (data){
+    const ProviderList = ({list, baseurl}) => {
+
+    }
+
+
+    if (info){
         return(
             <Box sx={{ flexGrow: 1 }}>
+                {/*-------first row-------*/}
                 <Grid container spacing={2}>
                     <Grid item xs={1}>
                     </Grid>
                     <Grid item xs={4}>
-                        <img src={`https://image.tmdb.org/t/p/original/${data.poster_path}`} alt="Movie Poster" style={{ width: '100%' }} />
+                        <img src={`https://image.tmdb.org/t/p/original/${info.poster_path}`} alt="Movie Poster" style={{ width: '100%' }} />
                     </Grid>
                     <Grid item xs={6}>
-                    <h1>{data.title}</h1>
+                        <h1>{info.title}</h1>
+                        <h1>({info.release_date})</h1>
+
                         <Box sx={{ '& > :not(style)': { m: 1 } }}>
                           <Fab color="primary" aria-label="add">
                             <BookmarkAddIcon />
@@ -49,9 +69,25 @@ function MovieDetail(){
                             <ThumbDownIcon />
                           </Fab>
                         </Box>
+
+                        <p>{info.overview}(tmdb)</p>
                     </Grid>
-                <Grid item xs={1}>
+                    <Grid item xs={1}>
+                    </Grid>
                 </Grid>
+                {/*-------second row-------*/}
+                <Grid container spacing={2}>
+                    <Grid item xs={1}>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <p>tomatometer: {rating.rt}, imdb: {rating.imdb}</p>
+                        <p>provider</p>
+                    </Grid>
+                    <Grid item xs={6}>
+                       <YouTube videoId={video}/>
+                    </Grid>
+                    <Grid item xs={1}>
+                    </Grid>
                 </Grid>
             </Box>
         )
