@@ -40,12 +40,17 @@ function MovieDetail(){
 
     }
 
+    const videoOpt = {
+        height: '300',
+        width: '520',
+    };
+
 
     if (info){
         return(
             <Box sx={{ flexGrow: 1 }}>
                 {/*-------first row-------*/}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} gap={"40px"}>
                     <Grid item xs={1}>
                     </Grid>
                     <Grid item xs={4}>
@@ -76,15 +81,24 @@ function MovieDetail(){
                     </Grid>
                 </Grid>
                 {/*-------second row-------*/}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} gap={"40px"}>
                     <Grid item xs={1}>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={5} >
                         <p>tomatometer: {rating.rt}, imdb: {rating.imdb}</p>
                         <p>provider</p>
                     </Grid>
-                    <Grid item xs={6}>
-                       <YouTube videoId={video}/>
+                    <Grid item xs={5} >
+                        <YouTube videoId={video} opts={videoOpt}/>
+                    </Grid>
+                    <Grid item xs={1}>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={2} gap={"40px"}>
+                    <Grid item xs={1}>
+                    </Grid>
+                    <Grid item xs={5} >
+                        <h2>Reviews</h2>
                     </Grid>
                     <Grid item xs={1}>
                     </Grid>
