@@ -79,12 +79,12 @@ function onSignIn(googleUser) {
 window.onSignIn = onSignIn;
 
 function signOut() {
-  var auth2 = window.gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function () {
-    console.log('User signed out.');
-  });
+  // 清空 localStorage
+  localStorage.clear();
+  console.log('Local storage cleared and user signed out from the application.');
 }
 window.signOut = signOut;
+
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -191,7 +191,7 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
     </Menu>
   );
-
+// 错误地将登录按键集成到了搜索按钮中，但是尝试修改的时候会诡异地报错nm3
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -207,8 +207,11 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
    
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={loginTest}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit" >  
                 <SearchIcon />
+            </IconButton>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={loginTest}>  
+                Sign In
             </IconButton>
             <IconButton
               size="large"
