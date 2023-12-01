@@ -4,7 +4,7 @@ import React from 'react';
 import { Card, CardContent, CardMedia, Typography, CardActionArea, Link } from '@mui/material';
 
 export default function MovieCard({movie}) {
-  // console.log(movie);
+  // console.log(homepage);
   return (
     <Link
         key ={movie._id}
@@ -24,6 +24,9 @@ export default function MovieCard({movie}) {
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {movie.year}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {movie.genres.join(', ')}
             </Typography>
           </CardContent>
         </CardActionArea>

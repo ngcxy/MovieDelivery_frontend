@@ -36,14 +36,34 @@ function MovieDetail(){
       fetchData();
     }, []);
 
-    const ProviderList = ({list, baseurl}) => {
-
+    const ProviderList = (list, baseurl) => {
+        if (list !== null && list.size > 0) {
+            console.log(list);
+            const provider = list.provider;
+            const logo = provider.map(provider => `${baseurl}${provider.logo_path}`);
+            const logo_img = logo.map(logo => <img key={logo} src={`${baseurl}${logo}`} alt={"providers"}/>);
+            return (
+                <div>
+                    {logo_img}
+                    <p> See more provider information on <a href={list.link}>TMDB</a></p>
+                </div>
+            );
+        } else {
+            const title = info.title;
+            const url = title.replace(/ /g, "-");
+            return (
+                <div>
+                    <p> Movie provider information on <a href={`https://www.justwatch.com/us/movie/${url}`}>JustWatch</a></p>
+                </div>
+            )
+        }
     }
 
     const videoOpt = {
         height: '300',
-        width: '520',
+        width: '530',
     };
+
 
 
     if (info){
@@ -80,15 +100,18 @@ function MovieDetail(){
                     <Grid item xs={1}>
                     </Grid>
                 </Grid>
+
                 {/*-------second row-------*/}
                 <Grid container spacing={2} gap={"40px"}>
                     <Grid item xs={1}>
                     </Grid>
                     <Grid item xs={5} >
                         <p>tomatometer: {rating.rt}, imdb: {rating.imdb}</p>
-                        <p>provider</p>
+                        <br/>
+                        {ProviderList(provider, 'https://image.tmdb.org/t/p/original/')}
                     </Grid>
-                    <Grid item xs={5} >
+
+                    <Grid item xs={5} overflowX="hide">
                         <YouTube videoId={video} opts={videoOpt}/>
                     </Grid>
                     <Grid item xs={1}>

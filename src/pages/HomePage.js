@@ -1,7 +1,7 @@
 import React from "react";
-import MoviesTrending from "../components/movie/MoviesTrending";
-import MoviesNew from "../components/movie/MoviesNew";
-import MovieInList from "../components/movie/MovieInList";
+import MoviesTrending from "../components/homepage/MoviesTrending";
+import MoviesNew from "../components/homepage/MoviesNew";
+import MovieInList from "../components/homepage/MovieInList";
 import Grid from '@mui/material/Grid';
 
 
