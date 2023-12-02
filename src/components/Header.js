@@ -18,8 +18,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Button from '@mui/material/Button';
+import { getPaginationUtilityClass } from '@mui/material';
 
-
+/*
+ * Search input box style
+ */
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -60,7 +64,58 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// header template based on Material UI
+/*
+ * Create form to request access token from Google's OAuth 2.0 server.
+ */
+function oauthSignIn() {
+  // Google's OAuth 2.0 endpoint for requesting an access token
+  var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+  // Create <form> element to submit parameters to OAuth 2.0 endpoint.
+  var form = document.createElement('form');
+  form.setAttribute('method', 'GET'); // Send as a GET request.
+  form.setAttribute('action', oauth2Endpoint);
+
+  // Parameters to pass to OAuth 2.0 endpoint.
+  var params = {'client_id': '360372065662-eqdpoukt2h2vie07b5sullbanvg1vj84.apps.googleusercontent.com',
+                'redirect_uri': 'http://localhost:3000/auth/google/callback',
+                'response_type': 'token',
+                'scope': 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
+                'include_granted_scopes': 'true',
+                'state': 'pass-through value'};
+
+  // Add form parameters as hidden input values.
+  for (var p in params) {
+    var input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', p);
+    input.setAttribute('value', params[p]);
+    form.appendChild(input);
+  }
+
+  // Add form to page and submit it to open the OAuth 2.0 endpoint.
+  document.body.appendChild(form);
+  form.submit();
+}
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId());
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+window.onSignIn = onSignIn;
+
+function signOut() {
+  localStorage.clear();
+  console.log('Local storage cleared and user signed out from the application.');
+}
+window.signOut = signOut;
+
+/*
+ * header template based on Material UI
+ */
 export default function PrimarySearchAppBar() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const navigate = useNavigate();
@@ -88,6 +143,14 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const loginTest = () => {
+    console.log("loginTest");
+
+    oauthSignIn();
+  }
+
+  // ----------- user menu ----------------
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -106,9 +169,12 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Sign out</MenuItem>
+      <MenuItem onClick={signOut}>Sign out</MenuItem>
+      <MenuItem onClick={loginTest}>Sign in</MenuItem>
     </Menu>
   );
+
+  // -------------------------------------
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -127,26 +193,7 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"

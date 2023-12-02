@@ -37,9 +37,8 @@ function MovieDetail(){
     }, []);
 
     const ProviderList = (list, baseurl) => {
-        if (list !== null && list.size > 0) {
-            console.log(list);
-            const provider = list.provider;
+        const provider = list.provider;
+        if (provider.length > 0) {
             const logo = provider.map(provider => `${baseurl}${provider.logo_path}`);
             const logo_img = logo.map(logo => <img key={logo} src={`${baseurl}${logo}`} alt={"providers"}/>);
             return (
@@ -48,7 +47,8 @@ function MovieDetail(){
                     <p> See more provider information on <a href={list.link}>TMDB</a></p>
                 </div>
             );
-        } else {
+        }
+        else {
             const title = info.title;
             const url = title.replace(/ /g, "-");
             return (
@@ -64,8 +64,6 @@ function MovieDetail(){
         width: '530',
     };
 
-
-
     if (info){
         return(
             <Box sx={{ flexGrow: 1 }}>
@@ -78,7 +76,7 @@ function MovieDetail(){
                     </Grid>
                     <Grid item xs={6}>
                         <h1>{info.title}</h1>
-                        <h1>({info.release_date})</h1>
+                        <h1>({info.release_date.slice(0,4)})</h1>
 
                         <Box sx={{ '& > :not(style)': { m: 1 } }}>
                           <Fab color="primary" aria-label="add">
@@ -108,7 +106,7 @@ function MovieDetail(){
                     <Grid item xs={5} >
                         <p>tomatometer: {rating.rt}, imdb: {rating.imdb}</p>
                         <br/>
-                        {ProviderList(provider, 'https://image.tmdb.org/t/p/original/')}
+                        {provider && ProviderList(provider, 'https://image.tmdb.org/t/p/original/')}
                     </Grid>
 
                     <Grid item xs={5} overflowX="hide">
