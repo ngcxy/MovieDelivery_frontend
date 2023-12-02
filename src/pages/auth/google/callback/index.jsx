@@ -24,7 +24,7 @@ export default class CallBackPage extends React.Component {
 
     render() {
         return (
-            <div>loding...</div>
+            <div>loading...</div>
         ); 
     }
 }

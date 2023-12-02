@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, Link} from 'react-router-dom';
 
 // mui
 import { styled, alpha } from '@mui/material/styles';
@@ -19,6 +20,49 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { getPaginationUtilityClass } from '@mui/material';
+
+/*
+ * Search input box style
+ */
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 /*
  * Create form to request access token from Google's OAuth 2.0 server.
@@ -54,21 +98,6 @@ function oauthSignIn() {
   form.submit();
 }
 
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
-
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId());
@@ -79,14 +108,18 @@ function onSignIn(googleUser) {
 window.onSignIn = onSignIn;
 
 function signOut() {
-  // 清空 localStorage
   localStorage.clear();
   console.log('Local storage cleared and user signed out from the application.');
 }
 window.signOut = signOut;
 
-
+/*
+ * header template based on Material UI
+ */
 export default function PrimarySearchAppBar() {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -116,6 +149,7 @@ export default function PrimarySearchAppBar() {
     oauthSignIn();
   }
 
+  // ----------- user menu ----------------
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -136,8 +170,11 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
       <MenuItem onClick={signOut}>Sign out</MenuItem>
+      <MenuItem onClick={loginTest}>Sign in</MenuItem>
     </Menu>
   );
+
+  // -------------------------------------
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -156,27 +193,7 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-  
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -191,28 +208,48 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
     </Menu>
   );
-// 错误地将登录按键集成到了搜索按钮中，但是尝试修改的时候会诡异地报错nm3
+
+  // -------------Search handler------------
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      navigate(`/movie/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+  // ---------------------------------------
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Movipendent
-          </Typography>
+             <Typography
+              variant="h6"
+              noWrap
+              component={Link}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+              to={"/"}
+            >
+              Movipendent
+            </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-   
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit" >  
+          <Toolbar>
+            <Search>
+              <SearchIconWrapper>
                 <SearchIcon />
-            </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={loginTest}>  
-                Sign In
-            </IconButton>
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+              />
+            </Search>
+          </Toolbar>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"

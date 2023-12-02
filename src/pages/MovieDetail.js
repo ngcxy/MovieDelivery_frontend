@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
+import YouTube from 'react-youtube';
 import axios from "axios";
 
 import {Grid, Box, Fab} from '@mui/material';
@@ -10,31 +11,73 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 function MovieDetail(){
     let { _id } = useParams();
-    const [data, setData] = useState(null);
+    const [info, setInfo] = useState(null);
+    const [rating, setRating] = useState([]);
+    const [provider, setProvider] = useState(null);
+    const [video, setVideo] = useState("");
+    const [review, setReview] = useState(null);
+
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://localhost:4000/movie/${_id}`);
-          setData(response.data);
+          const response_info = await axios.get(`http://localhost:4000/movies/${_id}`);
+          setInfo(response_info.data);
+          const response_rating = await axios.get(`http://localhost:4000/movies/${_id}/ratings`);
+          setRating(response_rating.data);
+          const response_provider = await axios.get(`http://localhost:4000/movies/${_id}/providers`);
+          setProvider(response_provider.data);
+          // const response_review = await axios.get(`http://localhost:4000/movies/${_id}/reviews`);
+          const response_video = await axios.get(`http://localhost:4000/movies/${_id}/videos`);
+          setVideo(response_video.data);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       };
-
       fetchData();
     }, []);
 
-    if (data){
+    const ProviderList = (list, baseurl) => {
+        const provider = list.provider;
+        if (provider.length > 0) {
+            const logo = provider.map(provider => `${baseurl}${provider.logo_path}`);
+            const logo_img = logo.map(logo => <img key={logo} src={`${baseurl}${logo}`} alt={"providers"}/>);
+            return (
+                <div>
+                    {logo_img}
+                    <p> See more provider information on <a href={list.link}>TMDB</a></p>
+                </div>
+            );
+        }
+        else {
+            const title = info.title;
+            const url = title.replace(/ /g, "-");
+            return (
+                <div>
+                    <p> Movie provider information on <a href={`https://www.justwatch.com/us/movie/${url}`}>JustWatch</a></p>
+                </div>
+            )
+        }
+    }
+
+    const videoOpt = {
+        height: '300',
+        width: '530',
+    };
+
+    if (info){
         return(
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2}>
+                {/*-------first row-------*/}
+                <Grid container spacing={2} gap={"40px"}>
                     <Grid item xs={1}>
                     </Grid>
                     <Grid item xs={4}>
-                        <img src={`https://image.tmdb.org/t/p/original/${data.poster_path}`} alt="Movie Poster" style={{ width: '100%' }} />
+                        <img src={`https://image.tmdb.org/t/p/original/${info.poster_path}`} alt="Movie Poster" style={{ width: '100%' }} />
                     </Grid>
                     <Grid item xs={6}>
-                    <h1>{data.title}</h1>
+                        <h1>{info.title}</h1>
+                        <h1>({info.release_date.slice(0,4)})</h1>
+
                         <Box sx={{ '& > :not(style)': { m: 1 } }}>
                           <Fab color="primary" aria-label="add">
                             <BookmarkAddIcon />
@@ -49,9 +92,37 @@ function MovieDetail(){
                             <ThumbDownIcon />
                           </Fab>
                         </Box>
+
+                        <p>{info.overview}(tmdb)</p>
                     </Grid>
-                <Grid item xs={1}>
+                    <Grid item xs={1}>
+                    </Grid>
                 </Grid>
+
+                {/*-------second row-------*/}
+                <Grid container spacing={2} gap={"40px"}>
+                    <Grid item xs={1}>
+                    </Grid>
+                    <Grid item xs={5} >
+                        <p>tomatometer: {rating.rt}, imdb: {rating.imdb}</p>
+                        <br/>
+                        {provider && ProviderList(provider, 'https://image.tmdb.org/t/p/original/')}
+                    </Grid>
+
+                    <Grid item xs={5} overflowX="hide">
+                        <YouTube videoId={video} opts={videoOpt}/>
+                    </Grid>
+                    <Grid item xs={1}>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={2} gap={"40px"}>
+                    <Grid item xs={1}>
+                    </Grid>
+                    <Grid item xs={5} >
+                        <h2>Reviews</h2>
+                    </Grid>
+                    <Grid item xs={1}>
+                    </Grid>
                 </Grid>
             </Box>
         )
