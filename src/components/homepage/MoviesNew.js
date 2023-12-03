@@ -12,7 +12,6 @@ function MoviesNew() {
       const fetchData = async () => {
         try {
           const response = await axios.get('http://localhost:4000/movies');
-          console.log(response.data);
           setData(response.data);
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -30,8 +29,8 @@ function MoviesNew() {
           <div style={styles.scrollContainer}>
               {data &&
                 data.map((m) => (
-                  <Grid item key={m.mid} style={styles.gridItem}>
-                      <MovieCard key={m.mid} movie={m} />
+                  <Grid item key={m._id} style={styles.gridItem}>
+                      <MovieCard movie={m} />
                   </Grid>
                 ))}
           </div>

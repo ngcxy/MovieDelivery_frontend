@@ -134,6 +134,11 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(null);
   };
 
+  const signoutThenClose = () => {
+    signOut();
+    handleMenuClose();
+  }
+
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -169,8 +174,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
-      <MenuItem onClick={signOut}>Sign out</MenuItem>
-      <MenuItem onClick={loginTest}>Sign in</MenuItem>
+      <MenuItem onClick={signoutThenClose}>Sign out</MenuItem>
     </Menu>
   );
 
@@ -221,6 +225,9 @@ export default function PrimarySearchAppBar() {
   };
   // ---------------------------------------
 
+  const userInfo = localStorage.getItem('user');
+  console.log(userInfo);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -257,17 +264,30 @@ export default function PrimarySearchAppBar() {
             >
                 <AddIcon />
             </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            {userInfo=== null ? (
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component={Button}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '18px' }}
+                  onClick={loginTest}
+                >
+                  Login
+                </Typography>
+                ):(
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>)
+            }
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
