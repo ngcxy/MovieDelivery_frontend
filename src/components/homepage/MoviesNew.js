@@ -12,8 +12,33 @@ function MoviesNew() {
       const fetchData = async () => {
         try {
           const response = await axios.get('http://localhost:4000/movies');
-          console.log(response.data);
-          setData(response.data);
+          const sortedData = response.data.sort((a, b) => {
+            // 按 creat_time 降序排序
+            const createTimeA = new Date(a.creat_time['$date']).getTime();
+            const createTimeB = new Date(b.creat_time['$date']).getTime();
+    
+            if (createTimeA !== createTimeB) {
+              return createTimeB - createTimeA;
+            }
+    
+            // 按 year 降序排序
+            const yearA = a.year;
+            const yearB = b.year;
+            if (yearA !== yearB) {
+              return yearB - yearA;
+            }
+    
+            // 如果 year 相同，按 primary_release_date 排序
+            const dateA = a.primary_release_date ? new Date(a.primary_release_date).getTime() : 0;
+            const dateB = b.primary_release_date ? new Date(b.primary_release_date).getTime() : 0;
+            if (dateA !== dateB) {
+              return dateB - dateA;
+            }
+    
+            // 如果 primary_release_date 相同或不存在，按 title 字母顺序排序
+            return a.title.localeCompare(b.title);
+          });
+          setData(sortedData);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
