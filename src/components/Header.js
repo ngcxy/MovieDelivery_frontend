@@ -226,17 +226,16 @@ export default function PrimarySearchAppBar() {
   // ---------------------------------------
 
   const userInfo = localStorage.getItem('user');
-  console.log(userInfo);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" style={{ backgroundColor: '#006d77'}}>
         <Toolbar>
              <Typography
-              variant="h6"
+              variant="h4"
               noWrap
               component={Link}
-              style={{ textDecoration: 'none', color: 'inherit' }}
+              style={{ textDecoration: 'none', color: 'inherit', fontFamily: 'Gill Sans, sans-serif', fontSize: '28px' }}
               sx={{ display: { xs: 'none', sm: 'block' } }}
               to={"/"}
             >

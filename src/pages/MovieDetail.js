@@ -2,12 +2,14 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import YouTube from 'react-youtube';
 import axios from "axios";
+import rt_icon from "../assets/rotten-tomato.png";
+import imdb_icon from "../assets/imdb.png";
 
 import {Grid, Box, Fab} from '@mui/material';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import Typography from "@mui/material/Typography";
 
 function MovieDetail(){
     let { _id } = useParams();
@@ -16,6 +18,9 @@ function MovieDetail(){
     const [provider, setProvider] = useState(null);
     const [video, setVideo] = useState("");
     const [review, setReview] = useState(null);
+    const [isClickedList, setIsClickedList] = useState(false);
+    const [isClickedLike, setIsClickedLike] = useState(false);
+    const [isClickedDislike, setIsClickedDislike] = useState(false);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -36,15 +41,63 @@ function MovieDetail(){
       fetchData();
     }, []);
 
+    const handleClickList = () => {
+        if (!localStorage.getItem('user')) {
+            alert("Please login first!")
+        } else {
+            if (isClickedList){
+                alert("Removed from your list");
+                setIsClickedList(false);
+            } else {
+                alert("Added to your list");
+                setIsClickedList(true);
+            }
+        }
+    }
+
+    const handleClickLike = () => {
+        if (!localStorage.getItem('user')) {
+            alert("Please login first!")
+        } else {
+            if (isClickedLike) {
+                setIsClickedLike(false);
+            } else {
+                setIsClickedLike(true);
+                setIsClickedDislike(false);
+            }
+        }
+
+    }
+
+    const handleClickDislike = () => {
+        if (!localStorage.getItem('user')) {
+            alert("Please login first!")
+        } else {
+            if (isClickedDislike) {
+                setIsClickedDislike(false);
+            } else {
+                setIsClickedDislike(true);
+                setIsClickedLike(false);
+            }
+        }
+    }
+
     const ProviderList = (list, baseurl) => {
         const provider = list.provider;
         if (provider.length > 0) {
             const logo = provider.map(provider => `${baseurl}${provider.logo_path}`);
-            const logo_img = logo.map(logo => <img key={logo} src={`${baseurl}${logo}`} alt={"providers"}/>);
+            const logo_img = logo.map(logo =>
+                <a href={list.link}>
+                    <img key={logo} src={`${baseurl}${logo}`} alt={"providers"}
+                     style={{marginRight: '20px', width: '60px', height: '60px'}}/>
+                </a>
+            );
             return (
                 <div>
                     {logo_img}
-                    <p> See more provider information on <a href={list.link}>TMDB</a></p>
+                    <Typography sx={{ fontFamily: 'Arial, sans-serif', fontSize: '18px', color: '#e29578'}}>
+                        See more provider information on <a href={list.link} style={{ color: '#006d77', textDecoration: 'underline' }}>TMDB</a>
+                    </Typography>
                 </div>
             );
         }
@@ -53,7 +106,9 @@ function MovieDetail(){
             const url = title.replace(/ /g, "-");
             return (
                 <div>
-                    <p> Movie provider information on <a href={`https://www.justwatch.com/us/movie/${url}`}>JustWatch</a></p>
+                    <Typography sx={{ fontFamily: 'Arial, sans-serif', fontSize: '18px', color: '#e29578'}}>
+                    Movie provider information on <a href={`https://www.justwatch.com/us/movie/${url}`} style={{ color: '#006d77', textDecoration: 'underline' }}>JustWatch</a>
+                    </Typography>
                 </div>
             )
         }
@@ -68,32 +123,51 @@ function MovieDetail(){
         return(
             <Box sx={{ flexGrow: 1 }}>
                 {/*-------first row-------*/}
-                <Grid container spacing={2} gap={"40px"}>
+                <Grid container spacing={2} gap={"40px"} style={{ marginTop: '20px' }}>
                     <Grid item xs={1}>
                     </Grid>
                     <Grid item xs={4}>
-                        <img src={`https://image.tmdb.org/t/p/original/${info.poster_path}`} alt="Movie Poster" style={{ width: '100%' }} />
+                        <img src={`https://image.tmdb.org/t/p/original/${info.poster_path}`} alt="Movie Poster"
+                             style={{ width: '100%' , height: 'auto'}} />
                     </Grid>
-                    <Grid item xs={6}>
-                        <h1>{info.title}</h1>
-                        <h1>({info.release_date.slice(0,4)})</h1>
+                    <Grid item xs={5} style={{ marginBottom: '25px', marginTop: '20px' }}>
+                        <Typography variant="h3" gutterBottom>
+                          {info.title}
+                        </Typography>
+                        <Typography variant="h4" color="textSecondary" gutterBottom>
+                          ({info.release_date.slice(0, 4)})
+                        </Typography>
 
-                        <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                          <Fab color="primary" aria-label="add">
+                        <Box sx={{ '& > :not(style)': { m: 1 } }} style={{ marginBottom: '100px', marginTop: '20px' }}>
+                          <Fab
+                              style={{
+                                  backgroundColor: isClickedList ? '#e29578' : '#006d77',
+                                  color: '#ffffff'}}
+                              aria-label="add"
+                              onClick={handleClickList}>
                             <BookmarkAddIcon />
                           </Fab>
-                          {/*  <Fab color="primary" aria-label="add">*/}
-                          {/*  <BookmarkRemoveIcon />*/}
-                          {/*</Fab>*/}
-                          <Fab color="primary" aria-label="edit">
+                          <Fab
+                              style={{
+                                  backgroundColor: isClickedLike ? '#e29578' : '#006d77' ,
+                                  color: '#ffffff'}}
+                              aria-label="edit"
+                              onClick={handleClickLike}>
                             <ThumbUpIcon />
                           </Fab>
-                          <Fab color="primary" aria-label="edit">
+                          <Fab
+                              style={{
+                                  backgroundColor: isClickedDislike ? '#e29578' : '#006d77' ,
+                                  color: '#ffffff'}}
+                              aria-label="edit"
+                              onClick={handleClickDislike}>
                             <ThumbDownIcon />
                           </Fab>
                         </Box>
 
-                        <p>{info.overview}(tmdb)</p>
+                            <Typography variant="body1" paragraph>
+                              {info.overview} (tmdb)
+                            </Typography>
                     </Grid>
                     <Grid item xs={1}>
                     </Grid>
@@ -103,13 +177,28 @@ function MovieDetail(){
                 <Grid container spacing={2} gap={"40px"}>
                     <Grid item xs={1}>
                     </Grid>
-                    <Grid item xs={5} >
-                        <p>tomatometer: {rating.rt}, imdb: {rating.imdb}</p>
-                        <br/>
-                        {provider && ProviderList(provider, 'https://image.tmdb.org/t/p/original/')}
+                    <Grid item xs={5} style={{
+                        marginBottom: '20px',
+                        marginTop: '30px' ,
+                      }}>
+                        <Typography variant="body1" style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            fontFamily: 'Arial, sans-serif',
+                            fontSize: '30px',
+                            fontWeight: 'bold'
+                        }}>
+                            <img src={rt_icon} alt="Rotten Tomatoes" style={{ marginLeft: '20px', marginRight: '20px', width: '50px', height: '50px' }} />
+                            {rating.rt}
+                            <img src={imdb_icon} alt="Rotten Tomatoes" style={{ marginLeft: '40px', marginRight: '20px', width: '60px', height: '60px' }} />
+                            {rating.imdb}
+                          </Typography>
+                        <Box  style={{marginTop: '80px' }}>
+                            {provider && ProviderList(provider, 'https://image.tmdb.org/t/p/original/')}
+                        </Box>
                     </Grid>
 
-                    <Grid item xs={5} overflowX="hide">
+                    <Grid item xs={5} overflowx="hide">
                         <YouTube videoId={video} opts={videoOpt}/>
                     </Grid>
                     <Grid item xs={1}>
