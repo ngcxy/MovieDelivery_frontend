@@ -2,6 +2,7 @@ import React from "react";
 import MoviesTrending from "../components/homepage/MoviesTrending";
 import MoviesNew from "../components/homepage/MoviesNew";
 import MovieInList from "../components/homepage/MovieInList";
+import CoverBlock from "../components/homepage/CoverBlock";
 import Grid from '@mui/material/Grid';
 
 
@@ -9,9 +10,15 @@ function HomePage() {
 
     return (
         <div>
-          <h1>This is homepage</h1>
-          <Grid container>
+            <br/>
+          <Grid container style={{ marginBottom: '25px' }} >
             <Grid item xs={12}>
+              <CoverBlock/>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} >
               <MoviesTrending/>
             </Grid>
 

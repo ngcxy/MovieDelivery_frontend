@@ -13,29 +13,29 @@ function MoviesNew() {
         try {
           const response = await axios.get('http://localhost:4000/movies');
           const sortedData = response.data.sort((a, b) => {
-            // 按 creat_time 降序排序
-            const createTimeA = new Date(a.creat_time['$date']).getTime();
-            const createTimeB = new Date(b.creat_time['$date']).getTime();
-    
+            // sorted with create date
+            const createTimeA = new Date(a.create_time);
+            const createTimeB = new Date(b.create_time);
+
             if (createTimeA !== createTimeB) {
               return createTimeB - createTimeA;
             }
-    
-            // 按 year 降序排序
+
+            // sort with year in descending
             const yearA = a.year;
             const yearB = b.year;
             if (yearA !== yearB) {
               return yearB - yearA;
             }
-    
-            // 如果 year 相同，按 primary_release_date 排序
-            const dateA = a.primary_release_date ? new Date(a.primary_release_date).getTime() : 0;
-            const dateB = b.primary_release_date ? new Date(b.primary_release_date).getTime() : 0;
+
+            // sort with release date if years are the same
+            const dateA = a.primary_release_date ? new Date(a.primary_release_date) : 0;
+            const dateB = b.primary_release_date ? new Date(b.primary_release_date) : 0;
             if (dateA !== dateB) {
               return dateB - dateA;
             }
-    
-            // 如果 primary_release_date 相同或不存在，按 title 字母顺序排序
+
+            // compare with letters if all others are the same
             return a.title.localeCompare(b.title);
           });
           setData(sortedData);
@@ -55,8 +55,8 @@ function MoviesNew() {
           <div style={styles.scrollContainer}>
               {data &&
                 data.map((m) => (
-                  <Grid item key={m.mid} style={styles.gridItem}>
-                      <MovieCard key={m.mid} movie={m} />
+                  <Grid item key={m._id} style={styles.gridItem}>
+                      <MovieCard movie={m} />
                   </Grid>
                 ))}
           </div>
