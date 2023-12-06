@@ -122,7 +122,8 @@ async function checkUserExist(user) {
     name: user.name
   }
   const res = await axios.get(`http://localhost:4000/users/${user.id}`);
-  if (!res) {
+  console.log("logged in")
+  if (!res || res.status === 404) {
     axios.post(`http://localhost:4000/users`, reqBody)
         .then(response => {
           console.log(response)
@@ -170,7 +171,7 @@ export default function PrimarySearchAppBar() {
 
   const loginTest = () => {
     oauthSignIn();
-    const user = localStorage.getItem('user');
+    const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       checkUserExist(user).then(response => {
         console.log(response)
