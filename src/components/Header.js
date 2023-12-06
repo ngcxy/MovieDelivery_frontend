@@ -20,6 +20,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { getPaginationUtilityClass } from '@mui/material';
+import axios from "axios";
 
 /*
  * Search input box style
@@ -98,20 +99,39 @@ function oauthSignIn() {
   form.submit();
 }
 
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId());
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
-window.onSignIn = onSignIn;
+// function onSignIn(googleUser) {
+//   var profile = googleUser.getBasicProfile();
+//   console.log('ID: ' + profile.getId());
+//   console.log('Name: ' + profile.getName());
+//   console.log('Image URL: ' + profile.getImageUrl());
+//   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+// }
+// window.onSignIn = onSignIn;
 
 function signOut() {
   localStorage.clear();
   console.log('Local storage cleared and user signed out from the application.');
 }
 window.signOut = signOut;
+
+async function checkUserExist(user) {
+  console.log("check called");
+  const reqBody = {
+    google_id: user.id,
+    email: user.email,
+    name: user.name
+  }
+  const res = await axios.get(`http://localhost:4000/users/${user.id}`);
+  if (!res) {
+    axios.post(`http://localhost:4000/users`, reqBody)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        })
+  }
+}
 
 /*
  * header template based on Material UI
@@ -149,9 +169,13 @@ export default function PrimarySearchAppBar() {
   };
 
   const loginTest = () => {
-    console.log("loginTest");
-
     oauthSignIn();
+    const user = localStorage.getItem('user');
+    if (user) {
+      checkUserExist(user).then(response => {
+        console.log(response)
+      });
+    }
   }
 
   // ----------- user menu ----------------
