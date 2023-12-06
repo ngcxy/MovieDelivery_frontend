@@ -34,6 +34,14 @@ function MovieDetail(){
           // const response_review = await axios.get(`http://localhost:4000/movies/${_id}/reviews`);
           const response_video = await axios.get(`http://localhost:4000/movies/${_id}/videos`);
           setVideo(response_video.data);
+
+          const user = JSON.parse(localStorage.getItem("user"));
+              if (user) {
+                  const response_user = await axios.get(`http://localhost:4000/users/${user.id}`);
+                  if (response_user.data.list_movie.includes(_id)){ setIsClickedList(true); }
+                  if (response_user.data.like.includes(_id)){ setIsClickedLike(true); }
+                  if (response_user.data.dislike.includes(_id)){ setIsClickedDislike(true); }
+              }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -41,43 +49,57 @@ function MovieDetail(){
       fetchData();
     }, []);
 
-    const handleClickList = () => {
-        if (!localStorage.getItem('user')) {
+    const handleClickList = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
             alert("Please login first!")
         } else {
             if (isClickedList){
+                await axios.delete(`http://localhost:4000/users/${user.id}/list`, {data: {mid: _id}});
                 alert("Removed from your list");
                 setIsClickedList(false);
             } else {
+                await axios.post(`http://localhost:4000/users/${user.id}/list`, {mid: _id});
                 alert("Added to your list");
                 setIsClickedList(true);
             }
         }
     }
 
-    const handleClickLike = () => {
-        if (!localStorage.getItem('user')) {
+    const handleClickLike = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
             alert("Please login first!")
         } else {
-            if (isClickedLike) {
-                setIsClickedLike(false);
-            } else {
-                setIsClickedLike(true);
+            if (isClickedDislike){
+                await axios.delete(`http://localhost:4000/users/${user.id}/dislike`, {data: {mid: _id}});
                 setIsClickedDislike(false);
             }
+            if (isClickedLike) {
+                await axios.delete(`http://localhost:4000/users/${user.id}/like`, {data: {mid: _id}});
+                setIsClickedLike(false);
+            } else {
+                await axios.post(`http://localhost:4000/users/${user.id}/like`, {mid: _id});
+                setIsClickedLike(true);
+            }
         }
-
     }
 
-    const handleClickDislike = () => {
-        if (!localStorage.getItem('user')) {
+    const handleClickDislike = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
             alert("Please login first!")
         } else {
+            if (isClickedLike){
+                await axios.delete(`http://localhost:4000/users/${user.id}/like`, {data: {mid: _id}});
+                setIsClickedLike(false);
+            }
             if (isClickedDislike) {
+                await axios.delete(`http://localhost:4000/users/${user.id}/dislike`, {data: {mid: _id}});
                 setIsClickedDislike(false);
             } else {
+                await axios.post(`http://localhost:4000/users/${user.id}/dislike`, {mid: _id});
                 setIsClickedDislike(true);
-                setIsClickedLike(false);
             }
         }
     }
