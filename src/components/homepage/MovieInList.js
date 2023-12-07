@@ -17,7 +17,6 @@ function MoviesInList() {
                     const user = JSON.parse(userInfo);
                     const userId = user.id;
                     const response = await axios.get(`http://localhost:4000/users/${userId}/list`);
-                    console.log(response.data);
                     setData(response.data);
                 }
         } catch (error) {
