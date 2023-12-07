@@ -14,9 +14,17 @@ export default class CallBackPage extends React.Component {
 
             let url = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="+access_token;
 
-            axios.get(url).then((res) => {
-                window.localStorage.setItem('user', JSON.stringify(res.data));
-                window.location.replace('/');
+            axios.get(url).then(async (res) => {
+
+                await axios.post('http://localhost:4000/users', {}, {
+                    email: res.data.email,
+                    name: res.data.name
+                }).then(userres => {
+                    window.localStorage.setItem('user', JSON.stringify(res.data));
+                    window.location.replace('/');
+                })
+
+
             })
         }
 
@@ -25,6 +33,6 @@ export default class CallBackPage extends React.Component {
     render() {
         return (
             <div>loading...</div>
-        ); 
+        );
     }
 }

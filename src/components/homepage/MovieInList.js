@@ -12,8 +12,14 @@ function MoviesInList() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:4000/movies');
-          setData(response.data);
+          const userInfo = localStorage.getItem('user');
+                if (userInfo) {
+                    const user = JSON.parse(userInfo);
+                    const userId = user.id;
+                    const response = await axios.get(`http://localhost:4000/users/${userId}/list`);
+                    console.log(response.data);
+                    setData(response.data);
+                }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
