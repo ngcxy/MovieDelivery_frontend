@@ -14,11 +14,9 @@ function MoviesInList() {
         try {
           const userInfo = localStorage.getItem('user');
                 if (userInfo) {
-                    const user = JSON.parse(userInfo); // 假设 userInfo 是一个 JSON 字符串
-                    const userId = user._id; // 或者 user 中的任何字段来表示用户的 ID
-
-                    // 使用用户 ID 发起请求
-                    const response = await axios.get(`http://localhost:4000/list/${userId}`);
+                    const user = JSON.parse(userInfo);
+                    const userId = user.id;
+                    const response = await axios.get(`http://localhost:4000/users/${userId}/list`);
                     setData(response.data);
                 }
         } catch (error) {

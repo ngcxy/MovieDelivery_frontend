@@ -114,26 +114,6 @@ function signOut() {
 }
 window.signOut = signOut;
 
-async function checkUserExist(user) {
-  console.log("check called");
-  const reqBody = {
-    google_id: user.id,
-    email: user.email,
-    name: user.name
-  }
-  const res = await axios.get(`http://localhost:4000/users/${user.id}`);
-  console.log("logged in")
-  if (!res || res.status === 404) {
-    axios.post(`http://localhost:4000/users`, reqBody)
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        })
-  }
-}
-
 /*
  * header template based on Material UI
  */
@@ -171,12 +151,6 @@ export default function PrimarySearchAppBar() {
 
   const loginTest = () => {
     oauthSignIn();
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      checkUserExist(user).then(response => {
-        console.log(response)
-      });
-    }
   }
 
   // ----------- user menu ----------------
@@ -314,7 +288,7 @@ export default function PrimarySearchAppBar() {
             }
           </Box>
 
-          <div className="g-signin2" data-onsuccess="onSignIn"></div>
+          {/*<div className="g-signin2" data-onsuccess="onSignIn"></div>*/}
 
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
