@@ -39,7 +39,7 @@ function MoviesNew() {
             // compare with letters if all others are the same
             return a.title.localeCompare(b.title);
           });
-          setData(sortedData);
+          setData(sortedData.slice(0, 10));
         } catch (error) {
           console.error('Error fetching data:', error);
         }

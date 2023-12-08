@@ -32,7 +32,7 @@ function MoviesTrending() {
             // sort with -dislike if likes & ratios are both the same
             return a.dislike - b.dislike;
           });
-          setData(sortedData);
+          setData(sortedData.slice(0, 10));
         } catch (error) {
           console.error('Error fetching data:', error);
         }

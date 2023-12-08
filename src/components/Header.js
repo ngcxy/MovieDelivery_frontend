@@ -153,6 +153,10 @@ export default function PrimarySearchAppBar() {
     oauthSignIn();
   }
 
+  const handleExploreClick = () => {
+    navigate('/movie/all');
+  };
+
   // ----------- user menu ----------------
 
   const menuId = 'primary-search-account-menu';
@@ -255,6 +259,16 @@ export default function PrimarySearchAppBar() {
               />
             </Search>
           </Toolbar>
+            <Typography
+                  variant="h6"
+                  noWrap
+                  component={Button}
+                  style={{ textDecoration: 'none', color: 'inherit', marginRight: '5px' }}
+                  sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '17px' }}
+                  onClick={handleExploreClick}
+                >
+                  Explore
+                </Typography>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
