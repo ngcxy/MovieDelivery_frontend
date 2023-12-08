@@ -173,7 +173,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
+      {/*<MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>*/}
       <MenuItem onClick={signoutThenClose}>Sign out</MenuItem>
     </Menu>
   );
