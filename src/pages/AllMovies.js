@@ -33,7 +33,7 @@ function AllMovies() {
     }, []);
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedSort, setSelectedSort] = useState("popular");
+  const [selectedSort, setSelectedSort] = useState("popularity");
 
   const handleSortClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -43,11 +43,29 @@ function AllMovies() {
     setAnchorEl(null);
     if (sortOption) {
       setSelectedSort(sortOption);
-      if (sortOption === "new") {
+      if (sortOption === "arrival") {
           const sortedData = data.sort((a, b) => {
-          const createTimeA = new Date(a.create_time);
+              const createTimeA = new Date(a.create_time);
             const createTimeB = new Date(b.create_time);
-            if (createTimeA !== createTimeB) {return createTimeB - createTimeA;}
+              if (createTimeA !== createTimeB) {
+                  return createTimeB - createTimeA;
+              }
+              const yearA = a.year;
+              const yearB = b.year;
+              if (yearA !== yearB) {
+                  return yearB - yearA;
+              }
+              const dateA = a.primary_release_date ? new Date(a.primary_release_date) : 0;
+              const dateB = b.primary_release_date ? new Date(b.primary_release_date) : 0;
+              if (dateA !== dateB) {
+                  return dateB - dateA;
+              }
+
+              return a.title.localeCompare(b.title);
+          });
+          setData(sortedData);
+      } else if (sortOption === "showtime") {
+          const sortedData = data.sort((a, b) => {
             const yearA = a.year;
             const yearB = b.year;
             if (yearA !== yearB) {return yearB - yearA;}
@@ -58,7 +76,7 @@ function AllMovies() {
             return a.title.localeCompare(b.title);
              });
           setData(sortedData);
-      } else if (sortOption === "popular") {
+      } else if (sortOption === "popularity") {
           const sortedData = data.sort((a, b) => {
             const ratioA = a.like / (a.like + a.dislike);
             const ratioB = b.like / (b.like + b.dislike);
@@ -77,7 +95,7 @@ function AllMovies() {
 
     return(
         <div>
-            <Button variant="contained" style={{marginTop: "20px", backgroundColor: '#006d77'}} onClick={handleSortClick}>
+            <Button variant="contained" style={{marginTop: "20px", backgroundColor: '#83c5be'}} onClick={handleSortClick}>
               Sort: {selectedSort}
             </Button>
             <Menu
@@ -85,8 +103,9 @@ function AllMovies() {
               open={Boolean(anchorEl)}
               onClose={() => handleSortClose()}
             >
-              <MenuItem onClick={() => handleSortClose('new')}>New</MenuItem>
-              <MenuItem onClick={() => handleSortClose('popular')}>Popular</MenuItem>
+                <MenuItem onClick={() => handleSortClose('popularity')}>Popularity</MenuItem>
+              <MenuItem onClick={() => handleSortClose('showtime')}>Showtime</MenuItem>
+                <MenuItem onClick={() => handleSortClose('arrival')}>Recent Arrive</MenuItem>
             </Menu>
             {data && data.map(d => <ResultCard movie={d}/>)}
         </div>

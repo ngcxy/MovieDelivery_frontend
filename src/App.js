@@ -8,6 +8,7 @@ import MovieDetail from "./pages/MovieDetail";
 import SearchResult from "./pages/SearchResult";
 import CallBackPage from "./pages/auth/google/callback/index"
 import AllMovies from "./pages/AllMovies";
+import RecommendForm from "./pages/RecommendForm";
 import { NotFound } from "./pages/NotFound";
 
 const App = () => {
@@ -18,7 +19,8 @@ const App = () => {
         <Route exact path="/" element={<HomePage />} />
         <Route exact path="/movie/:_id" element={<MovieDetail/>} />
         <Route path="/movie/search" element={<SearchResult/>} />
-          <Route path="/movie/all" element={<AllMovies/>} />
+        <Route path="/movie/all" element={<AllMovies/>} />
+        <Route path="/recommend" element={<RecommendForm/>} />
         <Route exact path="/auth/google/callback" element={<CallBackPage/>} />
 
         <Route path="*" element={<NotFound />} />

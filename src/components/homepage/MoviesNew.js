@@ -51,7 +51,7 @@ function MoviesNew() {
       return (
         <div style={styles.container}>
           <Typography variant="h5" gutterBottom>
-            Newest Added
+            Newest Arrival
           </Typography>
           <div style={styles.scrollContainer}>
               {data &&

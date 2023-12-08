@@ -217,7 +217,7 @@ function MovieDetail(){
                             fontWeight: 'bold'
                         }}>
                             <img src={thumbsup_icon} alt="Thumbs Up" style={{ marginLeft: '10px', marginRight: '5px', width: '60px', height: '60px' }} />
-                            {rating.local}
+                            {rating.local == "NaN%" ? "-" : rating.local}
                             <img src={rt_icon} alt="Rotten Tomatoes" style={{ marginLeft: '40px', marginRight: '20px', width: '50px', height: '50px' }} />
                             {rating.rt}
                             <img src={imdb_icon} alt="Rotten Tomatoes" style={{ marginLeft: '40px', marginRight: '20px', width: '60px', height: '60px' }} />

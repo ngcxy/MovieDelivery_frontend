@@ -269,13 +269,15 @@ export default function PrimarySearchAppBar() {
                 >
                   Explore
                 </Typography>
-            <IconButton
+            <Link to="/recommend" style={{ textDecoration: 'none', color: 'inherit', marginTop: '5px' }}>
+              <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
                 <AddIcon />
             </IconButton>
+            </Link>
             {userInfo=== null ? (
                 <Typography
                   variant="h6"
