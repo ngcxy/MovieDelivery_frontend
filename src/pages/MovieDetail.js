@@ -4,6 +4,11 @@ import YouTube from 'react-youtube';
 import axios from "axios";
 import rt_icon from "../assets/rotten-tomato.png";
 import imdb_icon from "../assets/imdb.png";
+import thumbsup_icon from "../assets/thumbsup.png";
+
+import ReviewInput from "../components/detail/review/ReviewInput";
+import ReviewDisplay from "../components/detail/review/ReviewDisplay";
+// import ReviewDisplay
 
 import {Grid, Box, Fab} from '@mui/material';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
@@ -52,7 +57,7 @@ function MovieDetail(){
     const handleClickList = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
-            alert("Please login first!")
+            alert("Please login first!");
         } else {
             if (isClickedList){
                 await axios.delete(`http://localhost:4000/users/${user.id}/list`, {data: {mid: _id}});
@@ -69,7 +74,7 @@ function MovieDetail(){
     const handleClickLike = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
-            alert("Please login first!")
+            alert("Please login first!");
         } else {
             if (isClickedDislike){
                 await axios.delete(`http://localhost:4000/users/${user.id}/dislike`, {data: {mid: _id}});
@@ -88,7 +93,7 @@ function MovieDetail(){
     const handleClickDislike = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
-            alert("Please login first!")
+            alert("Please login first!");
         } else {
             if (isClickedLike){
                 await axios.delete(`http://localhost:4000/users/${user.id}/like`, {data: {mid: _id}});
@@ -117,9 +122,9 @@ function MovieDetail(){
             return (
                 <div>
                     {logo_img}
-                    <Typography sx={{ fontFamily: 'Arial, sans-serif', fontSize: '18px', color: '#e29578'}}>
-                        See more provider information on <a href={list.link} style={{ color: '#006d77', textDecoration: 'underline' }}>TMDB</a>
-                    </Typography>
+                    {/*<Typography sx={{ fontFamily: 'Arial, sans-serif', fontSize: '18px', color: '#e29578'}}>*/}
+                    {/*    See more provider information on <a href={list.link} style={{ color: '#006d77', textDecoration: 'underline' }}>TMDB</a>*/}
+                    {/*</Typography>*/}
                 </div>
             );
         }
@@ -196,7 +201,7 @@ function MovieDetail(){
                 </Grid>
 
                 {/*-------second row-------*/}
-                <Grid container spacing={2} gap={"40px"}>
+                <Grid container spacing={2} gap={"40px"} style={{ marginBottom: '20px', marginTop: '20px' }}>
                     <Grid item xs={1}>
                     </Grid>
                     <Grid item xs={5} style={{
@@ -210,7 +215,9 @@ function MovieDetail(){
                             fontSize: '30px',
                             fontWeight: 'bold'
                         }}>
-                            <img src={rt_icon} alt="Rotten Tomatoes" style={{ marginLeft: '20px', marginRight: '20px', width: '50px', height: '50px' }} />
+                            <img src={thumbsup_icon} alt="Thumbs Up" style={{ marginLeft: '10px', marginRight: '5px', width: '60px', height: '60px' }} />
+                            {rating.local}
+                            <img src={rt_icon} alt="Rotten Tomatoes" style={{ marginLeft: '40px', marginRight: '20px', width: '50px', height: '50px' }} />
                             {rating.rt}
                             <img src={imdb_icon} alt="Rotten Tomatoes" style={{ marginLeft: '40px', marginRight: '20px', width: '60px', height: '60px' }} />
                             {rating.imdb}
@@ -226,11 +233,17 @@ function MovieDetail(){
                     <Grid item xs={1}>
                     </Grid>
                 </Grid>
+                {/*-------third row-------*/}
                 <Grid container spacing={2} gap={"40px"}>
                     <Grid item xs={1}>
                     </Grid>
-                    <Grid item xs={5} >
-                        <h2>Reviews</h2>
+                    <Grid item xs={10} >
+                        <Typography variant="h4" gutterBottom color='#006d77'>
+                          Reviews
+                        </Typography>
+                        <ReviewInput mid={_id}/>
+                        <br/>
+                        <ReviewDisplay mid={_id}/>
                     </Grid>
                     <Grid item xs={1}>
                     </Grid>

@@ -111,6 +111,7 @@ function oauthSignIn() {
 function signOut() {
   localStorage.clear();
   console.log('Local storage cleared and user signed out from the application.');
+  window.location.reload();
 }
 window.signOut = signOut;
 

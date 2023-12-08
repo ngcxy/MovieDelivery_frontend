@@ -20,7 +20,7 @@ function MoviesTrending() {
 
             // compare, consider NaN
             if (!isNaN(ratioA) && !isNaN(ratioB) && ratioA !== ratioB) {
-              return ratioB - ratioA; // 降序排序
+              return ratioB - ratioA;
             }
 
             // sort with like if ratios are the same
