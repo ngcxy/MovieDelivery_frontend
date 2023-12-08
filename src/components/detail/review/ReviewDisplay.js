@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {config} from "../../../config";
 import ReviewCard from "./ReviewCard";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -11,7 +12,7 @@ function ReviewDisplay(info) {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://localhost:4000/movies/${mid}/reviews`);
+          const response = await axios.get(`${config.apiUrl}/movies/${mid}/reviews`);
           setReviews(response.data);
         } catch (error) {
           console.error('Error fetching data:', error);

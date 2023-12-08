@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {config} from "../../config";
 import MovieCard from "./MovieCard";
 
 //mui
@@ -11,7 +12,7 @@ function MoviesNew() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:4000/movies');
+          const response = await axios.get(`${config.apiUrl}/movies`);
           const sortedData = response.data.sort((a, b) => {
             // sorted with create date
             const createTimeA = new Date(a.create_time);

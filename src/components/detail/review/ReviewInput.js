@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios";
-
+import {config} from "../../../config";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -16,7 +16,7 @@ export default function ReviewInput(info) {
         if (!user) {
             alert("Please login first!");
         } else {
-            await axios.post(`http://localhost:4000/movies/${info.mid}/reviews`, {review: reviewText, uid: user.id, name: userName});
+            await axios.post(`${config.apiUrl}/movies/${info.mid}/reviews`, {review: reviewText, uid: user.id, name: userName});
             console.log('Review submitted:', reviewText);
         }
     setReviewText('');
