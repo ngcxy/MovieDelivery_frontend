@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {config} from "../config";
 import {useLocation} from "react-router-dom";
 
 import ResultCard from "../components/search/ResultCard";
@@ -13,7 +14,7 @@ function SearchResult() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const m = await axios.get(`http://localhost:4000/movies/search?q=${q}`);
+          const m = await axios.get(`${config.apiUrl}/movies/search?q=${q}`);
           setMovies(m.data);
         } catch (error) {
           console.error('Error fetching data:', error);

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {config} from "../../config";
 import MovieCard from "./MovieCard";
 
 //mui
@@ -12,7 +13,7 @@ function MoviesTrending() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:4000/movies');
+          const response = await axios.get(`${config.apiUrl}/movies`);
           const sortedData = response.data.sort((a, b) => {
             // calculate ratio
             const ratioA = a.like / (a.like + a.dislike);
@@ -20,7 +21,7 @@ function MoviesTrending() {
 
             // compare, consider NaN
             if (!isNaN(ratioA) && !isNaN(ratioB) && ratioA !== ratioB) {
-              return ratioB - ratioA; // 降序排序
+              return ratioB - ratioA;
             }
 
             // sort with like if ratios are the same

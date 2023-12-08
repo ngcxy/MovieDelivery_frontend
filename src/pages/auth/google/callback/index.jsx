@@ -1,4 +1,5 @@
 import axios from "axios";
+import {config} from "../../../../config";
 import React from "react";
 
 export default class CallBackPage extends React.Component {
@@ -15,7 +16,7 @@ export default class CallBackPage extends React.Component {
             let url = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="+access_token;
 
             axios.get(url).then(async (res) => {
-                await axios.post('http://localhost:4000/users', res.data )
+                await axios.post(`${config.apiUrl}/users`, res.data )
                     .then(userres => {
                     window.localStorage.setItem('user', JSON.stringify(res.data));
                     window.location.replace('/');

@@ -13,7 +13,7 @@ function HomePage() {
   const scrollToTop = () => {
     window.scrollTo({
         top: 0,
-        behavior: 'smooth' 
+        behavior: 'smooth'
     });
 };
     return (
@@ -39,9 +39,9 @@ function HomePage() {
                         <Typography variant="h4">
                             Login To View Your Movie List!
                         </Typography>
-                        <Button 
-                            variant="contained" 
-                            color="primary" 
+                        <Button
+                            variant="contained"
+                            color="primary"
                             onClick={scrollToTop}
                             style={{ marginTop: '10px' }}
                         >

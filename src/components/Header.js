@@ -20,7 +20,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { getPaginationUtilityClass } from '@mui/material';
-import axios from "axios";
 
 
 /*
@@ -174,7 +173,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
+      {/*<MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>*/}
       <MenuItem onClick={signoutThenClose}>Sign out</MenuItem>
     </Menu>
   );

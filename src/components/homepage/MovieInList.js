@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {config} from "../../config";
 import MovieCard from "./MovieCard";
 
 //mui
@@ -16,7 +17,7 @@ function MoviesInList() {
                 if (userInfo) {
                     const user = JSON.parse(userInfo);
                     const userId = user.id;
-                    const response = await axios.get(`http://localhost:4000/users/${userId}/list`);
+                    const response = await axios.get(`${config.apiUrl}/users/${userId}/list`);
                     setData(response.data);
                 }
         } catch (error) {
