@@ -33,12 +33,17 @@ function MoviesInList() {
             My Watchlist
           </Typography>
           <div style={styles.scrollContainer}>
-              {data &&
-                data.map((m) => (
-                  <Grid item key={m._id} style={styles.gridItem}>
-                      <MovieCard movie={m} />
-                  </Grid>
-                ))}
+            {data && data.length > 0 ? (
+                    data.map((m) => (
+                        <Grid item key={m._id} style={styles.gridItem}>
+                            <MovieCard movie={m} />
+                        </Grid>
+                    ))
+                ) : (
+                    <Typography variant="h6" style={{ textAlign: 'left', width: '100%' }}>
+                        Add Movies in your Favourite List!
+                    </Typography>
+                )}
           </div>
         </div>
       );

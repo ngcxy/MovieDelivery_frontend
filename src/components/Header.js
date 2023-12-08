@@ -22,6 +22,7 @@ import Button from '@mui/material/Button';
 import { getPaginationUtilityClass } from '@mui/material';
 import axios from "axios";
 
+
 /*
  * Search input box style
  */
@@ -111,6 +112,7 @@ function oauthSignIn() {
 function signOut() {
   localStorage.clear();
   console.log('Local storage cleared and user signed out from the application.');
+  window.location.reload();
 }
 window.signOut = signOut;
 
