@@ -12,7 +12,6 @@ export default function ReviewInput(info) {
 
   const handleSubmit = async () => {
       const user = JSON.parse(localStorage.getItem("user"));
-      console.log("from review:: user is: " , user);
         if (!user) {
             alert("Please login first!");
         } else {
